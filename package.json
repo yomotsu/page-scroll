@@ -1,0 +1,27 @@
+{
+  "name": "page-scroll",
+  "version": "0.0.1",
+  "author": "Yomotsu",
+  "license": "MIT",
+  "main": "dist/page-scroll.js",
+  "repository": "yomotsu/page-scroll",
+  "jsnext:main": "dist/page-scroll.module.js",
+  "module": "dist/page-scroll.module.js",
+  "devDependencies": {
+    "babel-preset-env": "1.2.2",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "2.7.1",
+    "rollup-watch": "^3.2.2",
+    "uglify-js": "^2.6.0"
+  },
+  "scripts": {
+    "start": "npm run watch",
+    "watch": "rollup --config --watch",
+    "build": "rollup --config",
+    "release": "rollup --config && uglifyjs dist/page-scroll.js -cm --preamble \"/*!\n * page-scroll\n * https://github.com/yomotsu/page-scroll\n * (c) 2017 @yomotsu\n * Released under the MIT License.\n */\" > dist/page-scroll.min.js"
+  },
+  "engines": {
+    "node": "6.9.4",
+    "npm": "3.10.10"
+  }
+}

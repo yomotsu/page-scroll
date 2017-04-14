@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>=^.^=</title>
+<style>body{margin: 0;}.step{position: absolute;background: orange;}</style>
+</head>
+<body>
+<p><a href="https://github.com/yomotsu/ScrambleText">GitHub repo</a></p>
+
+
+<div style="position: fixed; top: 20px; left: 100px;">
+	<button onclick="pageScroll(100);">pageScroll(100);</button>
+	<button onclick="pageScroll(500);">pageScroll(500);</button>
+	<button onclick="pageScroll( document.querySelector( '.target' ) );">document.querySelector( '.target' )</button>
+	<button onclick="pageScroll(800, { duration: 1000 } );">pageScroll(800, { duration: 1000 });</button>
+	<button onclick="pageScroll(1000, { easing: 'easeInOutBack' } );">pageScroll(1000, { easing: 'easeInOutBack' });</button>
+	<button onclick="pageScroll(10000, 500);">pageScroll(10000, 500);</button>
+</div>
+
+
+
+<div style="top: 100px;" class="step">100px</div>
+<div style="top: 500px;" class="step">500px</div>
+<div style="top: 800px;" class="step target">.target</div>
+<div style="top: 1000px;" class="step">1000px</div>
+<div style="top: 1500px;" class="step">1500px</div>
+<div style="top: 3000px;" class="step">3000px</div>
+
+
+<script src="../dist/page-scroll.js"></script>
+<script>
+
+</script>
+
+</body>
+</html>
