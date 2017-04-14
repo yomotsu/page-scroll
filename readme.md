@@ -22,13 +22,13 @@ Copy page-scroll.js from /dist/page-scroll.js and place it in your project.
 ### with NPM
 
 ```
-$ npm install --save scramble-text
+$ npm install --save page-scroll
 ```
 
 then
 
 ```
-import pageScroll from 'scramble-text';
+import pageScroll from 'page-scroll';
 ```
 
 ### Applying effects
