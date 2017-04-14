@@ -7,7 +7,7 @@ a no-dependency function that page scroll smoothly
 
 ## demos
 
-- [basic](https://yomotsu.github.io/ScrambleText/examples/basic.html)
+- [basic](https://yomotsu.github.io/page-scroll/examples/basic.html)
 
 ## Usage
 
