@@ -1,6 +1,6 @@
 {
   "name": "page-scroll",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Yomotsu",
   "license": "MIT",
   "main": "dist/page-scroll.js",
