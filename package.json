@@ -19,9 +19,5 @@
     "watch": "rollup --config --watch",
     "build": "rollup --config",
     "release": "rollup --config && uglifyjs dist/page-scroll.js -cm --preamble \"/*!\n * page-scroll\n * https://github.com/yomotsu/page-scroll\n * (c) 2017 @yomotsu\n * Released under the MIT License.\n */\" > dist/page-scroll.min.js"
-  },
-  "engines": {
-    "node": "6.9.4",
-    "npm": "3.10.10"
   }
 }
