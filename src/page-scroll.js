@@ -2,31 +2,31 @@
 
 const easings = {
 
-	linear ( t ) {
+	linear( t ) {
 
 		return t;
 
 	},
 
-	easeOutQuad ( t ) {
+	easeOutQuad( t ) {
 
 		return t * ( 2 - t );
 
 	},
 
-	easeOutQuint ( t ) {
+	easeOutQuint( t ) {
 
 		return 1 + ( --t ) * t * t * t * t;
 
 	},
 
-	easeOutExpo: function (t) {
+	easeOutExpo( t ) {
 
-		return t == 1 ? t : 1 - Math.pow( 2, -10 * t );
+		return t == 1 ? t : 1 - Math.pow( 2, - 10 * t );
 
 	},
 
-	easeInOutBack ( t ) {
+	easeInOutBack( t ) {
 
 		const f = t < 0.5 ? 2 * t : 1 - ( 2 * t - 1 );
 		const g = Math.pow( f, 3 ) - f * Math.sin( f * Math.PI );
@@ -59,14 +59,15 @@ export default function ( destination, options ) {
 
 	( function scroll() {
 
-		if ( canceled ) { return; }
+		if ( canceled ) return;
 
 		const elapsedTime = Date.now() - startTime;
 		const progress = Math.min( 1, ( elapsedTime / duration ) );
 		const timeFunction = easings[ easing ]( progress );
 
-		if ( window.pageYOffset === destinationY || 1 <= progress ) {
+		if ( 1 <= progress ) {
 
+			window.scroll( 0, destinationY );
 			callback();
 			return;
 
@@ -78,11 +79,15 @@ export default function ( destination, options ) {
 
 	} )();
 
-	return function () { canceled = true; };
+	return () => {
+
+		canceled = true;
+
+	};
 
 }
 
-function getDocumentHeight () {
+function getDocumentHeight() {
 
 	return Math.max(
 		document.body.scrollHeight,
@@ -94,7 +99,7 @@ function getDocumentHeight () {
 
 }
 
-function getWindowHeight () {
+function getWindowHeight() {
 
 	return window.innerHeight ||
 		document.documentElement.clientHeight ||
@@ -102,7 +107,7 @@ function getWindowHeight () {
 
 }
 
-function rAF ( callback ) {
+function rAF( callback ) {
 
 	if ( !! window.requestAnimationFrame ) {
 
@@ -113,4 +118,4 @@ function rAF ( callback ) {
 
 	window.setTimeout( callback, 1000 / 60 );
 
-};
+}

@@ -25,13 +25,10 @@
 
 			return 1 + --t * t * t * t * t;
 		},
-
-
 		easeOutExpo: function easeOutExpo(t) {
 
 			return t == 1 ? t : 1 - Math.pow(2, -10 * t);
 		},
-
 		easeInOutBack: function easeInOutBack(t) {
 
 			var f = t < 0.5 ? 2 * t : 1 - (2 * t - 1);
@@ -59,16 +56,15 @@
 
 		(function scroll() {
 
-			if (canceled) {
-				return;
-			}
+			if (canceled) return;
 
 			var elapsedTime = Date.now() - startTime;
 			var progress = Math.min(1, elapsedTime / duration);
 			var timeFunction = easings[easing](progress);
 
-			if (window.pageYOffset === destinationY || 1 <= progress) {
+			if (1 <= progress) {
 
+				window.scroll(0, destinationY);
 				callback();
 				return;
 			}
@@ -79,6 +75,7 @@
 		})();
 
 		return function () {
+
 			canceled = true;
 		};
 	};

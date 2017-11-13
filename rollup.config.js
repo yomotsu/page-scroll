@@ -8,7 +8,20 @@ const license = `/*!
  */`
 
 export default {
-	entry: 'src/page-scroll.js',
+	input: 'src/page-scroll.js',
+	output: [
+		{
+			format: 'umd',
+			name: 'pageScroll',
+			file: 'dist/page-scroll.js',
+			banner: license
+		},
+		{
+			format: 'es',
+			file: 'dist/page-scroll.module.js',
+			banner: license
+		}
+	],
 	indent: '\t',
 	sourceMap: false,
 	plugins: [
@@ -27,18 +40,5 @@ export default {
 				} ]
 			]
 		} )
-	],
-	targets: [
-		{
-			format: 'umd',
-			moduleName: 'pageScroll',
-			dest: 'dist/page-scroll.js',
-			banner: license
-		},
-		{
-			format: 'es',
-			dest: 'dist/page-scroll.module.js',
-			banner: license
-		}
 	]
 };
