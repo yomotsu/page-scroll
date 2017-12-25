@@ -11,24 +11,24 @@ a no-dependency function that page scroll smoothly
 
 ## Usage
 
-### as Standalone lib
-
-Copy page-scroll.js from /dist/page-scroll.js and place it in your project.
-
-```
-<script src="./js/page-scroll.js"></script>
-```
-
 ### with NPM
 
-```
+```shell
 $ npm install --save page-scroll
 ```
 
 then
 
-```
+```shell
 import pageScroll from 'page-scroll';
+```
+
+### As a Standalone lib
+
+Copy page-scroll.js from /dist/page-scroll.js and place it in your project.
+
+```html
+<script src="./js/page-scroll.js"></script>
 ```
 
 ### Applying effects
@@ -42,7 +42,7 @@ import pageScroll from 'page-scroll';
 
 `pageScroll` takes options in second argument.
 
-```
+```javascript
 pageScroll( 500, {
 	duration: 500,
 	easing: 'easeOutExpo',
