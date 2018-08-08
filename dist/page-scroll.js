@@ -12,6 +12,8 @@
 
 	// based on https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
 
+	var scrollingElement = 'scrollingElement' in document ? document.scrollingElement : document.documentElement;
+
 	var easings = {
 		linear: function linear(t) {
 
@@ -38,21 +40,25 @@
 		}
 	};
 
-	var pageScroll = function (destination, options) {
+	function pageScroll (destination) {
+		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-		var duration = options && options.duration || 500;
-		var easing = options && options.easing || 'easeOutExpo';
-		var callback = options && options.callback || function () {};
+
+		var hasEl = !!options.el;
+		var el = options.el || scrollingElement;
+		var duration = options.duration || 500;
+		var easing = options.easing || 'easeOutExpo';
+		var callback = options.callback || function () {};
 
 		var canceled = false;
 
-		var startY = window.pageYOffset;
+		var startY = el.scrollTop;
 		var startTime = Date.now();
 
-		var documentHeight = getDocumentHeight();
-		var windowHeight = getWindowHeight();
+		var contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
+		var containerHeight = hasEl ? el.clientHeight : getWindowHeight();
 		var destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
-		var destinationY = documentHeight - destinationOffset < windowHeight ? documentHeight - windowHeight : destinationOffset;
+		var destinationY = contentHeight - destinationOffset < containerHeight ? contentHeight - containerHeight : destinationOffset;
 
 		(function scroll() {
 
@@ -64,21 +70,21 @@
 
 			if (1 <= progress) {
 
-				window.scroll(0, destinationY);
+				el.scrollTop = destinationY;
 				callback();
 				return;
 			}
 
 			rAF(scroll);
 
-			window.scroll(0, timeFunction * (destinationY - startY) + startY);
+			el.scrollTop = timeFunction * (destinationY - startY) + startY;
 		})();
 
 		return function () {
 
 			canceled = true;
 		};
-	};
+	}
 
 	function getDocumentHeight() {
 
