@@ -1,5 +1,7 @@
 // based on https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
 
+const scrollingElement = 'scrollingElement' in document ? document.scrollingElement : document.documentElement;
+
 const easings = {
 
 	linear( t ) {
@@ -37,24 +39,26 @@ const easings = {
 
 };
 
-export default function ( destination, options ) {
+export default function ( destination, options = {} ) {
 
-	const duration = options && options.duration || 500;
-	const easing   = options && options.easing || 'easeOutExpo';
-	const callback = options && options.callback || function () {};
+	const hasEl = !! options.el;
+	const el       = options.el || scrollingElement;
+	const duration = options.duration || 500;
+	const easing   = options.easing || 'easeOutExpo';
+	const callback = options.callback || function () {};
 
 	let canceled = false;
 
-	const startY = window.pageYOffset;
+	const startY = el.scrollTop;
 	const startTime = Date.now();
 
-	const documentHeight = getDocumentHeight();
-	const windowHeight   = getWindowHeight();
+	const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
+	const containerHeight = hasEl ? el.clientHeight : getWindowHeight();
 	const destinationOffset = typeof destination === 'number' ?
 		destination :
 		destination.offsetTop;
-	const destinationY = documentHeight - destinationOffset < windowHeight ?
-		documentHeight - windowHeight :
+	const destinationY = contentHeight - destinationOffset < containerHeight ?
+		contentHeight - containerHeight :
 		destinationOffset;
 
 	( function scroll() {
@@ -67,7 +71,7 @@ export default function ( destination, options ) {
 
 		if ( 1 <= progress ) {
 
-			window.scroll( 0, destinationY );
+			el.scrollTop = destinationY;
 			callback();
 			return;
 
@@ -75,7 +79,7 @@ export default function ( destination, options ) {
 
 		rAF( scroll );
 
-		window.scroll( 0, ( timeFunction * ( destinationY - startY ) ) + startY );
+		el.scrollTop = ( timeFunction * ( destinationY - startY ) ) + startY;
 
 	} )();
 

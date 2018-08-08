@@ -8,6 +8,7 @@ a no-dependency function that page scroll smoothly
 ## demos
 
 - [basic](https://yomotsu.github.io/page-scroll/examples/basic.html)
+- [overflow element](https://yomotsu.github.io/page-scroll/examples/element.html)
 
 ## Usage
 
@@ -44,6 +45,16 @@ Copy page-scroll.js from /dist/page-scroll.js and place it in your project.
 
 ```javascript
 pageScroll( 500, {
+	duration: 500,
+	easing: 'easeOutExpo',
+	callback: function () {}
+} );
+```
+
+for overflow elements
+```javascript
+pageScroll( 500, {
+	el: document.querySelector( '.overflowScrollElement' ),
 	duration: 500,
 	easing: 'easeOutExpo',
 	callback: function () {}

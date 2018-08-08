@@ -14,15 +14,16 @@ export default {
 			format: 'umd',
 			name: 'pageScroll',
 			file: 'dist/page-scroll.js',
-			banner: license
+			banner: license,
+			indent: '\t',
 		},
 		{
 			format: 'es',
 			file: 'dist/page-scroll.module.js',
-			banner: license
+			banner: license,
+			indent: '\t',
 		}
 	],
-	indent: '\t',
 	sourceMap: false,
 	plugins: [
 		babel( {
