@@ -47,7 +47,8 @@ Copy page-scroll.js from /dist/page-scroll.js and place it in your project.
 pageScroll( 500, {
 	duration: 500,
 	easing: 'easeOutExpo',
-	callback: function () {}
+	allowInterrupt: true,
+	callback: function () {},
 } );
 ```
 
@@ -57,6 +58,7 @@ pageScroll( 500, {
 	el: document.querySelector( '.overflowScrollElement' ),
 	duration: 500,
 	easing: 'easeOutExpo',
-	callback: function () {}
+	allowInterrupt: true,
+	callback: function () {},
 } );
 ```

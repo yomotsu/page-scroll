@@ -18,7 +18,7 @@ const easings = {
 
 	easeOutQuint( t ) {
 
-		return 1 + ( --t ) * t * t * t * t;
+		return 1 + ( -- t ) * t * t * t * t;
 
 	},
 
@@ -46,6 +46,7 @@ export default function ( destination, options = {} ) {
 	const duration = options.duration || 500;
 	const easing   = options.easing || 'easeOutExpo';
 	const callback = options.callback || function () {};
+	const allowInterrupt = options.allowInterrupt || false;
 
 	let canceled = false;
 
@@ -61,6 +62,14 @@ export default function ( destination, options = {} ) {
 		contentHeight - containerHeight :
 		destinationOffset;
 
+	const cancelScrolling = () => {
+
+		canceled = true;
+		document.removeEventListener( 'wheel', cancelScrolling );
+		document.removeEventListener( 'touchmove', cancelScrolling );
+
+	};
+
 	( function scroll() {
 
 		if ( canceled ) return;
@@ -72,20 +81,27 @@ export default function ( destination, options = {} ) {
 		if ( 1 <= progress ) {
 
 			el.scrollTop = destinationY;
+			cancelScrolling();
 			callback();
 			return;
 
 		}
 
-		rAF( scroll );
-
+		requestAnimationFrame( scroll );
 		el.scrollTop = ( timeFunction * ( destinationY - startY ) ) + startY;
 
 	} )();
 
+	if ( allowInterrupt ) {
+
+		document.addEventListener( 'wheel', cancelScrolling );
+		document.addEventListener( 'touchmove', cancelScrolling );
+
+	}
+
 	return () => {
 
-		canceled = true;
+		cancelScrolling();
 
 	};
 
@@ -108,18 +124,5 @@ function getWindowHeight() {
 	return window.innerHeight ||
 		document.documentElement.clientHeight ||
 		document.body.clientHeight;
-
-}
-
-function rAF( callback ) {
-
-	if ( !! window.requestAnimationFrame ) {
-
-		window.requestAnimationFrame( callback );
-		return;
-
-	}
-
-	window.setTimeout( callback, 1000 / 60 );
 
 }
