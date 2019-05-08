@@ -49,6 +49,7 @@
 		var duration = options.duration || 500;
 		var easing = options.easing || 'easeOutExpo';
 		var callback = options.callback || function () {};
+		var allowInterrupt = options.allowInterrupt || false;
 
 		var canceled = false;
 
@@ -59,6 +60,13 @@
 		var containerHeight = hasEl ? el.clientHeight : getWindowHeight();
 		var destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
 		var destinationY = contentHeight - destinationOffset < containerHeight ? contentHeight - containerHeight : destinationOffset;
+
+		var cancelScrolling = function cancelScrolling() {
+
+			canceled = true;
+			document.removeEventListener('wheel', cancelScrolling);
+			document.removeEventListener('touchmove', cancelScrolling);
+		};
 
 		(function scroll() {
 
@@ -71,18 +79,24 @@
 			if (1 <= progress) {
 
 				el.scrollTop = destinationY;
+				cancelScrolling();
 				callback();
 				return;
 			}
 
-			rAF(scroll);
-
+			requestAnimationFrame(scroll);
 			el.scrollTop = timeFunction * (destinationY - startY) + startY;
 		})();
 
+		if (allowInterrupt) {
+
+			document.addEventListener('wheel', cancelScrolling);
+			document.addEventListener('touchmove', cancelScrolling);
+		}
+
 		return function () {
 
-			canceled = true;
+			cancelScrolling();
 		};
 	}
 
@@ -94,17 +108,6 @@
 	function getWindowHeight() {
 
 		return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	}
-
-	function rAF(callback) {
-
-		if (!!window.requestAnimationFrame) {
-
-			window.requestAnimationFrame(callback);
-			return;
-		}
-
-		window.setTimeout(callback, 1000 / 60);
 	}
 
 	return pageScroll;
