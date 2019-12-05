@@ -43,7 +43,7 @@ export default function ( destination, options = {} ) {
 
 	const hasEl = !! options.el;
 	const el       = options.el || scrollingElement;
-	const duration = options.duration || 500;
+	const duration = isNumber( options.duration ) ? options.duration : 500;
 	const easing   = options.easing || 'easeOutExpo';
 	const callback = options.callback || function () {};
 	const allowInterrupt = options.allowInterrupt || false;
@@ -69,6 +69,14 @@ export default function ( destination, options = {} ) {
 		document.removeEventListener( 'touchmove', cancelScrolling );
 
 	};
+
+	if ( duration <= 0 ) {
+
+		el.scrollTop = destinationY;
+		callback();
+		return;
+
+	}
 
 	( function scroll() {
 
@@ -126,3 +134,9 @@ function getWindowHeight() {
 		document.body.clientHeight;
 
 }
+
+function isNumber( value ) {
+
+	return ( ( typeof value === 'number' ) && ( isFinite( value ) ) );
+
+};
