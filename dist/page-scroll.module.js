@@ -40,7 +40,7 @@ function pageScroll (destination) {
 
 	var hasEl = !!options.el;
 	var el = options.el || scrollingElement;
-	var duration = options.duration || 500;
+	var duration = isNumber(options.duration) ? options.duration : 500;
 	var easing = options.easing || 'easeOutExpo';
 	var callback = options.callback || function () {};
 	var allowInterrupt = options.allowInterrupt || false;
@@ -61,6 +61,13 @@ function pageScroll (destination) {
 		document.removeEventListener('wheel', cancelScrolling);
 		document.removeEventListener('touchmove', cancelScrolling);
 	};
+
+	if (duration <= 0) {
+
+		el.scrollTop = destinationY;
+		callback();
+		return;
+	}
 
 	(function scroll() {
 
@@ -102,6 +109,11 @@ function getDocumentHeight() {
 function getWindowHeight() {
 
 	return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+}
+
+function isNumber(value) {
+
+	return typeof value === 'number' && isFinite(value);
 }
 
 export default pageScroll;
