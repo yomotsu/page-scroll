@@ -1,45 +1,31 @@
-import babel from 'rollup-plugin-babel'
+import typescript from 'rollup-plugin-typescript2';
+import pkg from './package.json';
 
 const license = `/*!
- * page-scroll.js
- * https://github.com/yomotsu/page-scroll
+ * ${ pkg.name }
+ * https://github.com/${ pkg.repository }
  * (c) 2017 @yomotsu
  * Released under the MIT License.
- */`
+ */`;
 
 export default {
-	input: 'src/page-scroll.js',
+	input: 'src/page-scroll.ts',
 	output: [
 		{
 			format: 'umd',
 			name: 'pageScroll',
-			file: 'dist/page-scroll.js',
+			file: pkg.main,
 			banner: license,
 			indent: '\t',
 		},
 		{
 			format: 'es',
-			file: 'dist/page-scroll.module.js',
+			file: pkg.module,
 			banner: license,
 			indent: '\t',
 		}
 	],
-	sourceMap: false,
 	plugins: [
-		babel( {
-			exclude: 'node_modules/**',
-			presets: [
-				[ 'env', {
-					targets: {
-						browsers: [
-							'last 2 versions',
-							'ie >= 9'
-						]
-					},
-					loose: true,
-					modules: false
-				} ]
-			]
-		} )
-	]
+		typescript( { typescript: require( 'typescript' ) } ),
+	],
 };

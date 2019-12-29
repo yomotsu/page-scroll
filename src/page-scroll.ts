@@ -1,34 +1,34 @@
 // based on https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
 
-const scrollingElement = 'scrollingElement' in document ? document.scrollingElement : document.documentElement;
+const scrollingElement: Element = document.scrollingElement || document.documentElement;
 
 const easings = {
 
-	linear( t ) {
+	linear( t: number ): number {
 
 		return t;
 
 	},
 
-	easeOutQuad( t ) {
+	easeOutQuad( t: number ): number {
 
 		return t * ( 2 - t );
 
 	},
 
-	easeOutQuint( t ) {
+	easeOutQuint( t: number ): number {
 
 		return 1 + ( -- t ) * t * t * t * t;
 
 	},
 
-	easeOutExpo( t ) {
+	easeOutExpo( t: number ): number {
 
 		return t == 1 ? t : 1 - Math.pow( 2, - 10 * t );
 
 	},
 
-	easeInOutBack( t ) {
+	easeInOutBack( t: number ): number {
 
 		const f = t < 0.5 ? 2 * t : 1 - ( 2 * t - 1 );
 		const g = Math.pow( f, 3 ) - f * Math.sin( f * Math.PI );
@@ -39,11 +39,22 @@ const easings = {
 
 };
 
-export default function ( destination, options = {} ) {
+type easingType = 'linear' | 'easeOutQuad' | 'easeOutQuint' | 'easeOutExpo' | 'easeInOutBack';
+type destination = HTMLElement | number;
+interface PageScrollOption {
+	el?: HTMLElement;
+	duration?: number;
+	easing?: easingType;
+	callback?: Function;
+	allowInterrupt?: boolean;
+}
+interface cancelScrolling { (): void }
+
+export default function ( destination: destination, options: PageScrollOption = {} ): cancelScrolling {
 
 	const hasEl = !! options.el;
 	const el       = options.el || scrollingElement;
-	const duration = isNumber( options.duration ) ? options.duration : 500;
+	const duration = isNumber( options.duration ) ? options.duration as number : 500;
 	const easing   = options.easing || 'easeOutExpo';
 	const callback = options.callback || function () {};
 	const allowInterrupt = options.allowInterrupt || false;
@@ -62,7 +73,7 @@ export default function ( destination, options = {} ) {
 		contentHeight - containerHeight :
 		destinationOffset;
 
-	const cancelScrolling = () => {
+	const cancelScrolling = (): void => {
 
 		canceled = true;
 		document.removeEventListener( 'wheel', cancelScrolling );
@@ -74,7 +85,7 @@ export default function ( destination, options = {} ) {
 
 		el.scrollTop = destinationY;
 		callback();
-		return;
+		return () => {};
 
 	}
 
@@ -115,7 +126,7 @@ export default function ( destination, options = {} ) {
 
 }
 
-function getDocumentHeight() {
+function getDocumentHeight(): number {
 
 	return Math.max(
 		document.body.scrollHeight,
@@ -127,7 +138,7 @@ function getDocumentHeight() {
 
 }
 
-function getWindowHeight() {
+function getWindowHeight(): number {
 
 	return window.innerHeight ||
 		document.documentElement.clientHeight ||
@@ -135,8 +146,8 @@ function getWindowHeight() {
 
 }
 
-function isNumber( value ) {
+function isNumber( value: any ): boolean {
 
 	return ( ( typeof value === 'number' ) && ( isFinite( value ) ) );
 
-};
+}
