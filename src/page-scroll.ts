@@ -1,6 +1,7 @@
 // based on https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
 
-const scrollingElement: Element = document.scrollingElement || document.documentElement;
+const isBrowser = typeof window !== 'undefined';
+const scrollingElement: Element | null = isBrowser ? ( document.scrollingElement || document.documentElement ) : null;
 
 const easings = {
 
@@ -51,6 +52,8 @@ interface PageScrollOption {
 interface cancelScrolling { (): void }
 
 export default function ( destination: destination, options: PageScrollOption = {} ): cancelScrolling {
+
+	if ( ! scrollingElement ) return () => {};
 
 	const hasEl = !! options.el;
 	const el       = options.el || scrollingElement;
