@@ -4,7 +4,8 @@
  * (c) 2017 @yomotsu
  * Released under the MIT License.
  */
-var scrollingElement = document.scrollingElement || document.documentElement;
+var isBrowser = typeof window !== 'undefined';
+var scrollingElement = isBrowser ? (document.scrollingElement || document.documentElement) : null;
 var easings = {
     linear: function (t) {
         return t;
@@ -26,6 +27,8 @@ var easings = {
 };
 function pageScroll (destination, options) {
     if (options === void 0) { options = {}; }
+    if (!scrollingElement)
+        return function () { };
     var hasEl = !!options.el;
     var el = options.el || scrollingElement;
     var duration = isNumber(options.duration) ? options.duration : 500;

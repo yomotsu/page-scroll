@@ -7,10 +7,11 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global = global || self, global.pageScroll = factory());
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.pageScroll = factory());
 }(this, (function () { 'use strict';
 
-	var scrollingElement = document.scrollingElement || document.documentElement;
+	var isBrowser = typeof window !== 'undefined';
+	var scrollingElement = isBrowser ? (document.scrollingElement || document.documentElement) : null;
 	var easings = {
 	    linear: function (t) {
 	        return t;
@@ -32,6 +33,8 @@
 	};
 	function pageScroll (destination, options) {
 	    if (options === void 0) { options = {}; }
+	    if (!scrollingElement)
+	        return function () { };
 	    var hasEl = !!options.el;
 	    var el = options.el || scrollingElement;
 	    var duration = isNumber(options.duration) ? options.duration : 500;
