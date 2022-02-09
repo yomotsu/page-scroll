@@ -40,9 +40,9 @@ function pageScroll (destination, options) {
     var startTime = Date.now();
     var contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
     var containerHeight = hasEl ? el.clientHeight : getWindowHeight();
-    var destinationOffset = typeof destination === 'number' ?
-        destination :
-        destination.offsetTop;
+    var destinationOffset = typeof destination === 'number' ? destination :
+        el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
+            destination.offsetTop;
     var destinationY = contentHeight - destinationOffset < containerHeight ?
         contentHeight - containerHeight :
         destinationOffset;
