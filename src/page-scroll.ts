@@ -69,8 +69,9 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 	const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
 	const containerHeight = hasEl ? el.clientHeight : getWindowHeight();
-	const destinationOffset = typeof destination === 'number' ?
-		destination :
+	const destinationOffset =
+		typeof destination === 'number' ? destination :
+		el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
 		destination.offsetTop;
 	const destinationY = contentHeight - destinationOffset < containerHeight ?
 		contentHeight - containerHeight :
