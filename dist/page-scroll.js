@@ -8,7 +8,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.pageScroll = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
 	var isBrowser = typeof window !== 'undefined';
 	var scrollingElement = isBrowser ? (document.scrollingElement || document.documentElement) : null;
@@ -40,7 +40,7 @@
 	    var duration = isNumber(options.duration) ? options.duration : 500;
 	    var easing = options.easing || 'easeOutExpo';
 	    var callback = options.callback || function () { };
-	    var allowInterrupt = options.allowInterrupt || false;
+	    var disableInterrupt = options.disableInterrupt || false;
 	    var canceled = false;
 	    var startY = el.scrollTop;
 	    var startTime = Date.now();
@@ -77,7 +77,7 @@
 	        requestAnimationFrame(scroll);
 	        el.scrollTop = (timeFunction * (destinationY - startY)) + startY;
 	    })();
-	    if (allowInterrupt) {
+	    if (!disableInterrupt) {
 	        document.addEventListener('wheel', cancelScrolling);
 	        document.addEventListener('touchmove', cancelScrolling);
 	    }
@@ -99,4 +99,4 @@
 
 	return pageScroll;
 
-})));
+}));

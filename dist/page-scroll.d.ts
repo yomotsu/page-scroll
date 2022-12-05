@@ -1,11 +1,11 @@
-declare type easingType = 'linear' | 'easeOutQuad' | 'easeOutQuint' | 'easeOutExpo' | 'easeInOutBack';
-declare type destination = HTMLElement | number;
+type easingType = 'linear' | 'easeOutQuad' | 'easeOutQuint' | 'easeOutExpo' | 'easeInOutBack';
+type destination = HTMLElement | number;
 interface PageScrollOption {
     el?: HTMLElement;
     duration?: number;
     easing?: easingType;
     callback?: Function;
-    allowInterrupt?: boolean;
+    disableInterrupt?: boolean;
 }
 interface cancelScrolling {
     (): void;

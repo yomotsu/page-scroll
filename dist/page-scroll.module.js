@@ -34,7 +34,7 @@ function pageScroll (destination, options) {
     var duration = isNumber(options.duration) ? options.duration : 500;
     var easing = options.easing || 'easeOutExpo';
     var callback = options.callback || function () { };
-    var allowInterrupt = options.allowInterrupt || false;
+    var disableInterrupt = options.disableInterrupt || false;
     var canceled = false;
     var startY = el.scrollTop;
     var startTime = Date.now();
@@ -71,7 +71,7 @@ function pageScroll (destination, options) {
         requestAnimationFrame(scroll);
         el.scrollTop = (timeFunction * (destinationY - startY)) + startY;
     })();
-    if (allowInterrupt) {
+    if (!disableInterrupt) {
         document.addEventListener('wheel', cancelScrolling);
         document.addEventListener('touchmove', cancelScrolling);
     }
@@ -91,4 +91,4 @@ function isNumber(value) {
     return ((typeof value === 'number') && (isFinite(value)));
 }
 
-export default pageScroll;
+export { pageScroll as default };
