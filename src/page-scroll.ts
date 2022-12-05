@@ -47,7 +47,7 @@ interface PageScrollOption {
 	duration?: number;
 	easing?: easingType;
 	callback?: Function;
-	allowInterrupt?: boolean;
+	disableInterrupt?: boolean;
 }
 interface cancelScrolling { (): void }
 
@@ -60,7 +60,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 	const duration = isNumber( options.duration ) ? options.duration as number : 500;
 	const easing   = options.easing || 'easeOutExpo';
 	const callback = options.callback || function () {};
-	const allowInterrupt = options.allowInterrupt || false;
+	const disableInterrupt = options.disableInterrupt || false;
 
 	let canceled = false;
 
@@ -115,7 +115,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 	} )();
 
-	if ( allowInterrupt ) {
+	if ( ! disableInterrupt ) {
 
 		document.addEventListener( 'wheel', cancelScrolling );
 		document.addEventListener( 'touchmove', cancelScrolling );
