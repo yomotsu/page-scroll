@@ -64,6 +64,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 	let canceled = false;
 
+	if ( el instanceof HTMLElement ) el.style.scrollBehavior = 'auto';
 	const startY = el.scrollTop;
 	const startTime = Date.now();
 
@@ -80,6 +81,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 	const cancelScrolling = (): void => {
 
 		canceled = true;
+		if ( el instanceof HTMLElement ) el.style.scrollBehavior = '';
 		document.removeEventListener( 'wheel', cancelScrolling );
 		document.removeEventListener( 'touchmove', cancelScrolling );
 
