@@ -36,6 +36,8 @@ function pageScroll (destination, options) {
     var callback = options.callback || function () { };
     var disableInterrupt = options.disableInterrupt || false;
     var canceled = false;
+    if (el instanceof HTMLElement)
+        el.style.scrollBehavior = 'auto';
     var startY = el.scrollTop;
     var startTime = Date.now();
     var contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
@@ -48,6 +50,8 @@ function pageScroll (destination, options) {
         destinationOffset;
     var cancelScrolling = function () {
         canceled = true;
+        if (el instanceof HTMLElement)
+            el.style.scrollBehavior = '';
         document.removeEventListener('wheel', cancelScrolling);
         document.removeEventListener('touchmove', cancelScrolling);
     };
