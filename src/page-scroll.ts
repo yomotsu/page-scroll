@@ -46,91 +46,98 @@ interface PageScrollOption {
 	el?: HTMLElement;
 	duration?: number;
 	easing?: easingType;
-	callback?: Function;
 	disableInterrupt?: boolean;
 }
-interface cancelScrolling { (): void }
 
-export default function ( destination: destination, options: PageScrollOption = {} ): cancelScrolling {
+export default function ( destination: destination, options: PageScrollOption = {} ): Promise<void> {
 
-	if ( ! scrollingElement ) return () => {};
+	return new Promise( ( resolve, reject ) => {
 
-	const hasEl = !! options.el;
-	const el       = options.el || scrollingElement;
-	const duration = isNumber( options.duration ) ? options.duration as number : 500;
-	const easing   = options.easing || 'easeOutExpo';
-	const callback = options.callback || function () {};
-	const disableInterrupt = options.disableInterrupt || false;
+		if ( ! scrollingElement ) {
 
-	let canceled = false;
-
-	if ( el instanceof HTMLElement ) el.style.scrollBehavior = 'auto';
-	const startY = el.scrollTop;
-	const startTime = Date.now();
-
-	const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
-	const containerHeight = hasEl ? el.clientHeight : getWindowHeight();
-	const destinationOffset =
-		typeof destination === 'number' ? destination :
-		el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
-		destination.offsetTop;
-	const destinationY = contentHeight - destinationOffset < containerHeight ?
-		contentHeight - containerHeight :
-		destinationOffset;
-
-	const cancelScrolling = (): void => {
-
-		canceled = true;
-		if ( el instanceof HTMLElement ) el.style.scrollBehavior = '';
-		document.removeEventListener( 'wheel', cancelScrolling );
-		document.removeEventListener( 'touchmove', cancelScrolling );
-
-	};
-
-	if ( duration <= 0 ) {
-
-		el.scrollTop = destinationY;
-		callback();
-		return () => {};
-
-	}
-
-	( function scroll() {
-
-		if ( canceled ) return;
-
-		const elapsedTime = Date.now() - startTime;
-		const progress = Math.min( 1, ( elapsedTime / duration ) );
-		const timeFunction = easings[ easing ]( progress );
-
-		if ( 1 <= progress ) {
-
-			el.scrollTop = destinationY;
-			cancelScrolling();
-			callback();
+			reject();
 			return;
 
 		}
 
-		requestAnimationFrame( scroll );
-		el.scrollTop = ( timeFunction * ( destinationY - startY ) ) + startY;
+		const hasEl = !! options.el;
+		const el       = options.el || scrollingElement;
+		const duration = isNumber( options.duration ) ? options.duration as number : 500;
+		const easing   = options.easing || 'easeOutExpo';
+		const disableInterrupt = options.disableInterrupt || false;
 
-	} )();
+		let canceled = false;
 
-	if ( ! disableInterrupt ) {
+		if ( el instanceof HTMLElement ) el.style.scrollBehavior = 'auto';
+		const startY = el.scrollTop;
+		const startTime = Date.now();
 
-		document.addEventListener( 'wheel', cancelScrolling );
-		document.addEventListener( 'touchmove', cancelScrolling );
+		const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
+		const containerHeight = hasEl ? el.clientHeight : getWindowHeight();
+		const destinationOffset =
+			typeof destination === 'number' ? destination :
+			el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
+			destination.offsetTop;
+		const destinationY = contentHeight - destinationOffset < containerHeight ?
+			contentHeight - containerHeight :
+			destinationOffset;
 
-	}
+		const endScrolling = (): void => {
 
-	return () => {
+			canceled = true;
+			if ( el instanceof HTMLElement ) el.style.scrollBehavior = '';
+			document.removeEventListener( 'wheel', cancelScrolling );
+			document.removeEventListener( 'touchmove', cancelScrolling );
 
-		cancelScrolling();
+		};
 
-	};
+		const cancelScrolling = (): void => {
 
-}
+			endScrolling();
+			reject();
+
+		};
+
+		if ( duration <= 0 ) {
+
+			el.scrollTop = destinationY;
+			resolve();
+			return;
+
+		}
+
+		( function scroll() {
+
+			if ( canceled ) return;
+
+			const elapsedTime = Date.now() - startTime;
+			const progress = Math.min( 1, ( elapsedTime / duration ) );
+			const timeFunction = easings[ easing ]( progress );
+
+			if ( 1 <= progress ) {
+
+				el.scrollTop = destinationY;
+				endScrolling();
+				resolve();
+				return;
+
+			}
+
+			requestAnimationFrame( scroll );
+			el.scrollTop = ( timeFunction * ( destinationY - startY ) ) + startY;
+
+		} )();
+
+		if ( ! disableInterrupt ) {
+
+			document.addEventListener( 'wheel', cancelScrolling );
+			document.addEventListener( 'touchmove', cancelScrolling );
+
+		}
+
+	} );
+
+};
 
 function getDocumentHeight(): number {
 

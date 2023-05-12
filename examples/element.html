@@ -19,7 +19,7 @@
 
 
 <div>
-	<button onclick="pageScroll( 100, { el: document.querySelector( '.Scrollable' ) } );">pageScroll(100, { el: el } );</button>
+	<button onclick="pageScroll( 100, { el: document.querySelector( '.Scrollable' ) } ).then( () => console.log( 'done' ), () => { console.log( 'canceled' )} );">pageScroll(100, { el: el } );</button>
 	<button onclick="pageScroll( 500, { el: document.querySelector( '.Scrollable' ) } );">pageScroll(500, { el: el } );</button>
 	<button onclick="pageScroll( document.querySelector( '.target' ), { el: document.querySelector( '.Scrollable' ) } );">pageScroll( document.querySelector( '.target' ), { el: el } )</button>
 	<button onclick="pageScroll(800, { el: document.querySelector( '.Scrollable' ), duration: 1000 } );">pageScroll(800, { el: el, duration: 1000 });</button>

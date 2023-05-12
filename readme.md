@@ -48,8 +48,7 @@ pageScroll( 500, {
 	duration: 500,
 	easing: 'easeOutExpo',
 	disableInterrupt: true,
-	callback: function () {},
-} );
+} ).then( () => console.log( 'done' ), () => console.log( 'canceled' ) );
 ```
 
 for overflow elements
@@ -59,6 +58,5 @@ pageScroll( 500, {
 	duration: 500,
 	easing: 'easeOutExpo',
 	disableInterrupt: true,
-	callback: function () {},
 } );
 ```
