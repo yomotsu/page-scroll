@@ -25,10 +25,26 @@
 	    easeOutExpo(t) {
 	        return t == 1 ? t : 1 - Math.pow(2, -10 * t);
 	    },
-	    easeInOutBack(t) {
-	        const f = t < 0.5 ? 2 * t : 1 - (2 * t - 1);
-	        const g = Math.pow(f, 3) - f * Math.sin(f * Math.PI);
-	        return t < 0.5 ? 0.5 * g : 0.5 * (1 - g) + 0.5;
+	    easeOutBack(t) {
+	        const c1 = 1.70158;
+	        const c3 = c1 + 1;
+	        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+	    },
+	    easeOutBounce(t) {
+	        const n1 = 7.5625;
+	        const d1 = 2.75;
+	        if (t < 1 / d1) {
+	            return n1 * t * t;
+	        }
+	        else if (t < 2 / d1) {
+	            return n1 * (t -= 1.5 / d1) * t + 0.75;
+	        }
+	        else if (t < 2.5 / d1) {
+	            return n1 * (t -= 2.25 / d1) * t + 0.9375;
+	        }
+	        else {
+	            return n1 * (t -= 2.625 / d1) * t + 0.984375;
+	        }
 	    }
 	};
 	function pageScroll (destination, options = {}) {
@@ -39,6 +55,7 @@
 	        }
 	        const hasEl = !!options.el;
 	        const el = options.el || scrollingElement;
+	        const scrollPaddingTop = cssValueToNumber(window.getComputedStyle(el).scrollPaddingTop);
 	        const duration = isNumber(options.duration) ? options.duration : 500;
 	        const easing = options.easing || 'easeOutExpo';
 	        const disableInterrupt = options.disableInterrupt || false;
@@ -53,8 +70,8 @@
 	            el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
 	                destination.offsetTop;
 	        const destinationY = contentHeight - destinationOffset < containerHeight ?
-	            contentHeight - containerHeight :
-	            destinationOffset;
+	            contentHeight - containerHeight - scrollPaddingTop :
+	            destinationOffset - scrollPaddingTop;
 	        const endScrolling = () => {
 	            canceled = true;
 	            if (el instanceof HTMLElement)
@@ -99,6 +116,11 @@
 	    return window.innerHeight ||
 	        document.documentElement.clientHeight ||
 	        document.body.clientHeight;
+	}
+	function cssValueToNumber(value) {
+	    if (/(^-?[0-9]+)px$/.test(value))
+	        return parseInt(value, 10);
+	    return 0;
 	}
 	function isNumber(value) {
 	    return ((typeof value === 'number') && (isFinite(value)));

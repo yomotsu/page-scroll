@@ -1,4 +1,12 @@
-type easingType = 'linear' | 'easeOutQuad' | 'easeOutQuint' | 'easeOutExpo' | 'easeInOutBack';
+declare const easings: {
+    linear(t: number): number;
+    easeOutQuad(t: number): number;
+    easeOutQuint(t: number): number;
+    easeOutExpo(t: number): number;
+    easeOutBack(t: number): number;
+    easeOutBounce(t: number): number;
+};
+type easingType = keyof typeof easings;
 type destination = HTMLElement | number;
 interface PageScrollOption {
     el?: HTMLElement;
