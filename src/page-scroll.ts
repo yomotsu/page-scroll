@@ -84,7 +84,6 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 		let canceled = false;
 
-		if ( el instanceof HTMLElement ) el.style.scrollBehavior = 'auto';
 		const startY = el.scrollTop;
 		const startTime = Date.now();
 
@@ -101,7 +100,6 @@ export default function ( destination: destination, options: PageScrollOption = 
 		const endScrolling = (): void => {
 
 			canceled = true;
-			if ( el instanceof HTMLElement ) el.style.scrollBehavior = '';
 			document.removeEventListener( 'wheel', cancelScrolling );
 			document.removeEventListener( 'touchmove', cancelScrolling );
 
@@ -116,7 +114,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 		if ( duration <= 0 ) {
 
-			el.scrollTop = destinationY;
+			el.scrollTo( { top: destinationY, behavior: 'instant' } );
 			resolve();
 			return;
 
@@ -132,7 +130,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 
 			if ( 1 <= progress ) {
 
-				el.scrollTop = destinationY;
+				el.scrollTo( { top: destinationY, behavior: 'instant' } );
 				endScrolling();
 				resolve();
 				return;
@@ -140,7 +138,7 @@ export default function ( destination: destination, options: PageScrollOption = 
 			}
 
 			requestAnimationFrame( scroll );
-			el.scrollTop = ( timeFunction * ( destinationY - startY ) ) + startY;
+			el.scrollTo( { top: ( timeFunction * ( destinationY - startY ) ) + startY, behavior: 'instant' } );
 
 		} )();
 
