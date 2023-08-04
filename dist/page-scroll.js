@@ -60,8 +60,6 @@
 	        const easing = options.easing || 'easeOutExpo';
 	        const disableInterrupt = options.disableInterrupt || false;
 	        let canceled = false;
-	        if (el instanceof HTMLElement)
-	            el.style.scrollBehavior = 'auto';
 	        const startY = el.scrollTop;
 	        const startTime = Date.now();
 	        const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
@@ -74,8 +72,6 @@
 	            destinationOffset - scrollPaddingTop;
 	        const endScrolling = () => {
 	            canceled = true;
-	            if (el instanceof HTMLElement)
-	                el.style.scrollBehavior = '';
 	            document.removeEventListener('wheel', cancelScrolling);
 	            document.removeEventListener('touchmove', cancelScrolling);
 	        };
@@ -84,7 +80,7 @@
 	            reject();
 	        };
 	        if (duration <= 0) {
-	            el.scrollTop = destinationY;
+	            el.scrollTo({ top: destinationY, behavior: 'instant' });
 	            resolve();
 	            return;
 	        }
@@ -95,13 +91,13 @@
 	            const progress = Math.min(1, (elapsedTime / duration));
 	            const timeFunction = easings[easing](progress);
 	            if (1 <= progress) {
-	                el.scrollTop = destinationY;
+	                el.scrollTo({ top: destinationY, behavior: 'instant' });
 	                endScrolling();
 	                resolve();
 	                return;
 	            }
 	            requestAnimationFrame(scroll);
-	            el.scrollTop = (timeFunction * (destinationY - startY)) + startY;
+	            el.scrollTo({ top: (timeFunction * (destinationY - startY)) + startY, behavior: 'instant' });
 	        })();
 	        if (!disableInterrupt) {
 	            document.addEventListener('wheel', cancelScrolling);
