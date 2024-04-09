@@ -59,7 +59,7 @@ function pageScroll (destination, options = {}) {
         const contentHeight = hasEl ? el.scrollHeight : getDocumentHeight();
         const containerHeight = hasEl ? el.clientHeight : getWindowHeight();
         const destinationOffset = typeof destination === 'number' ? destination :
-            el === scrollingElement ? destination.getBoundingClientRect().top + window.pageYOffset :
+            el === scrollingElement ? destination.getBoundingClientRect().top + window.scrollY :
                 destination.offsetTop;
         const destinationY = contentHeight - destinationOffset < containerHeight ?
             contentHeight - containerHeight - scrollPaddingTop :
