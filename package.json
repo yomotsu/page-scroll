@@ -10,7 +10,7 @@
   "types": "dist/page-scroll.d.ts",
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
-    "rollup": "^3.27.2",
+    "rollup": "^3.29.5",
     "terser": "^5.19.2",
     "tslib": "^2.6.1",
     "typescript": "^5.1.6"
